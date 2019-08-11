@@ -103,5 +103,5 @@ class VGG(nn.Module):
     def forward(self, x):
         output = self.cnn(x)
         output = output.view(output.size(0), -1)
-        output = self.fc(output)
+        #output = self.fc(output)
         return output
