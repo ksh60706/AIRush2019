@@ -87,7 +87,7 @@ class VGG(nn.Module):
 
             # 512 x 4 x 4
         )
-
+        '''
         self.fc = nn.Sequential(
             nn.Linear(512 * 4 * 4, 4096),
             nn.ReLU(),
@@ -99,9 +99,37 @@ class VGG(nn.Module):
 
             nn.Linear(2048, 30)
         )
+        '''
+
+        self.fc = nn.Sequential(
+            nn.Linear(512 * 7 * 7, 4096),
+            nn.ReLU(True),
+            nn.Dropout(),
+
+            nn.Linear(4096, 4096),
+            nn.ReLU(True),
+            nn.Dropout(),
+
+            nn.Linear(4096, 1000)
+        )
+
+        '''
+        self.avg_pool = nn.AvgPool2d(7)
+        self.classifier = nn.Linear(512,10)
+        '''
+
 
     def forward(self, x):
         output = self.cnn(x)
         output = output.view(output.size(0), -1)
-        #output = self.fc(output)
+        output = self.fc(output)
         return output
+
+    '''
+    def forward(self, x):
+        features = self.cnn(x)
+        x = self.avg_pool(features)
+        x = x.view(features.size(0), -1)
+        x = self.classifier(x)
+        return x
+    '''
